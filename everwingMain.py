@@ -15,13 +15,11 @@ levelUp = (949, 699)
 bossRaids = (1101, 421)
 
 #params
-x_pad = -402
+x_pad = -430
 y_pad = 0
 leftLimit = 721
 rightLimit = 1173
 playing = False
-
-
 
 def leftClick(c):
     win32api.SetCursorPos((x_pad+c[0],y_pad+c[1]))
@@ -128,7 +126,7 @@ def farmMove():
     print("Moving Farm...press 'LSHIFT' to stop")
     active = True
     precision = 3
-    print(win32api.GetAsyncKeyState(win32con.VK_LSHIFT) & 0x8000)
+    #print(win32api.GetAsyncKeyState(win32con.VK_LSHIFT) & 0x8000)
     start_move = time.time()
     bossRaids = 1
     runBoss()
