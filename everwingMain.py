@@ -147,9 +147,6 @@ def farmMove():
             active = False #farming will stop
     print("Moving Farm is done.")
 
-def debug():
-    ImageGrab.grab().save('images\\screenTest.png', 'PNG')
-
 def main():
     print("EverWing Bot created by Michael You")
     print("Programmed specifically for the ASUS Zenbook 13\"")
