@@ -1,10 +1,11 @@
 #import cv2
-from PIL import ImageGrab, ImageOps
-#from numpy import *
+#from PIL import ImageGrab, ImageOps
+import numpy as np
 import time
 import win32api, win32con
 import pyautogui
 import random
+import constant
 
 #constants
 playAgainBtn = (947, 886)
@@ -22,12 +23,7 @@ rightLimit = 1173
 playing = False
 
 def leftClick(c):
-    win32api.SetCursorPos((x_pad+c[0],y_pad+c[1]))
-    time.sleep(0.1)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, x_pad+c[0],y_pad+c[1])
-    time.sleep(0.1)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x_pad+c[0],y_pad+c[1])
-    #print("Left click", c[0],c[1])
+    pyautogui.click(c[0], c[1])
 
 def movePlayer(x):
     global currPlayerCoor
@@ -60,40 +56,11 @@ def movePlayer2(x):
         print("New Coors ", currPlayerCoor)
         print("Moved to ", x)
 
-def sweepLeft(precision):
-    global currPlayerCoor
-    delta = int((currPlayerCoor[0]-leftLimit)/(precision+1))
-    delta2 = int(100/precision)
-    for x in range(precision): #go left
-        #movePlayer2(-x*delta2)
-        pyautogui.moveTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1])
-        #time.sleep(0.05)
-        currPlayerCoor = (currPlayerCoor[0]-delta, currPlayerCoor[1])
-        pyautogui.dragTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1], button='left')
-        #time.sleep(0.05)
-    for x in range(precision): #go back
-        #movePlayer2(-100+x*delta2)
-        pyautogui.moveTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1])
-        #time.sleep(0.05)
-        currPlayerCoor = (currPlayerCoor[0]+delta, currPlayerCoor[1])
-        pyautogui.dragTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1], button='left')
-        #time.sleep(0.05)
+def sweepLeft():
+    pyautogui.dragTo(constant.LEFT_LIMIT, constant.PLAY_AGAIN[1], 1/constant.SPEED, button='left')
 
-def sweepRight(precision):
-    global currPlayerCoor
-    delta = int((currPlayerCoor[0]-rightLimit)/(precision+1))
-    for x in range(precision): #go left
-        pyautogui.moveTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1])
-        time.sleep(0.05)
-        currPlayerCoor = (currPlayerCoor[0]-delta, currPlayerCoor[1])
-        pyautogui.dragTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1], button='left')
-        #time.sleep(0.05)
-    for x in range(precision): #go back
-        pyautogui.moveTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1])
-        time.sleep(0.05)
-        currPlayerCoor = (currPlayerCoor[0]+delta, currPlayerCoor[1])
-        pyautogui.dragTo(x_pad+currPlayerCoor[0],y_pad+currPlayerCoor[1], button='left')
-        #time.sleep(0.05)
+def sweepRight():
+    pyautogui.dragTo(constant.RIGHT_LIMIT, constant.PLAY_AGAIN[1], 1/constant.SPEED, button='left')
 
 def farmSimple(t):
     print("Simple Farm...press 's' to stop")
@@ -102,7 +69,7 @@ def farmSimple(t):
     while(((time.time()-start_time)<t) and (not stop)):
         if(win32api.GetAsyncKeyState(0x53) & 0x8000):
             stop = True #farming will stop
-        leftClick(playAgainBtn)
+        leftClick(constant.PLAY_AGAIN)
         time.sleep(1)
     print("Simple Farm is done.")
 
@@ -125,7 +92,6 @@ def runBoss():
 def farmMove():
     print("Moving Farm...press 'LSHIFT' to stop")
     active = True
-    precision = 3
     #print(win32api.GetAsyncKeyState(win32con.VK_LSHIFT) & 0x8000)
     start_move = time.time()
     bossRaids = 1
@@ -138,8 +104,8 @@ def farmMove():
         time.sleep(0.5)
         leftClick(playAgainBtn)
         time.sleep(0.5)
-        sweepLeft(precision)
-        sweepRight(precision)
+        sweepLeft()
+        sweepRight()
         if(win32api.GetAsyncKeyState(win32con.VK_LSHIFT) & 0x8000):
             print("pressed stop code")
             active = False #farming will stop
@@ -150,7 +116,7 @@ def main():
     print("Programmed specifically for the ASUS Zenbook 13\"")
     
     #SELECT BOT MODE
-    option = 1
+    option = 0
 
     print("Farming (", option, ") Mode...")
     if option==0:
