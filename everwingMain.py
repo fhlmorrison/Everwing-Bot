@@ -67,6 +67,7 @@ def farmSimple(t):
     start_time = time.time()
     while(((time.time()-start_time)<t) and (not stop)):
         leftClick(constant.PLAY_AGAIN)
+        time.sleep(5)
         while not (imp.dead() or stop):
             if(win32api.GetAsyncKeyState(0x53) & 0x8000):
                 stop = True #farming will stop
@@ -77,7 +78,7 @@ def farmSimple(t):
             if stop:
                 break
         leftClick(constant.CONTINUE_X_BUTTON)
-        time.sleep(10)
+        time.sleep(8)
         leftClick(constant.SKIP_BUTTON)
         time.sleep(4)
         leftClick(constant.OKAY_BUTTON)
