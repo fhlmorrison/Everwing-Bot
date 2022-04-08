@@ -4,11 +4,9 @@ import numpy as np
 import time
 import win32api, win32con
 import pyautogui
-import random
 import constant
 
 #constants
-playAgainBtn = (947, 886)
 begPlayerCoor = (947, 832)
 currPlayerCoor = (947, 832)
 bossX = (1140, 254)
@@ -76,7 +74,7 @@ def farmSimple(t):
 def runBoss():
     print("Beginning Boss Raid")
     time.sleep(60) #waits 60 seconds to die
-    leftClick(playAgainBtn) #should be menu now
+    leftClick(constant.PLAY_AGAIN) #should be menu now
     time.sleep(1)
     leftClick(bossRaids)
     time.sleep(1)
@@ -102,7 +100,7 @@ def farmMove():
             runBoss()
         leftClick(levelUp)
         time.sleep(0.5)
-        leftClick(playAgainBtn)
+        leftClick(constant.PLAY_AGAIN)
         time.sleep(0.5)
         sweepLeft()
         sweepRight()
@@ -112,8 +110,7 @@ def farmMove():
     print("Moving Farm is done.")
 
 def main():
-    print("EverWing Bot created by Michael You")
-    print("Programmed specifically for the ASUS Zenbook 13\"")
+    print("Bot starting")
     
     #SELECT BOT MODE
     option = 0
