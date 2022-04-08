@@ -76,7 +76,7 @@ def farmSimple(t):
             sweepRight()
         else: 
             if stop:
-                break
+                continue
         leftClick(constant.CONTINUE_X_BUTTON)
         time.sleep(8)
         leftClick(constant.SKIP_BUTTON)
@@ -86,56 +86,33 @@ def farmSimple(t):
 
     print("Simple Farm is done.")
 
-def runBoss():
-    print("Beginning Boss Raid")
-    time.sleep(60) #waits 60 seconds to die
-    leftClick(constant.PLAY_AGAIN) #should be menu now
-    time.sleep(1)
-    leftClick(bossRaids)
-    time.sleep(1)
-    farmSimple(490) #farm for 10 minutes
-    time.sleep(30) #wait for death
-    leftClick(bossX) #exit boss raids
-    time.sleep(0.5)
-    leftClick(bossX) #exit boss raids
-    time.sleep(0.5)
-    #should be back at menu
-    print("End boss raid")
+def farmMove(t):
+    # Will have auto pathing
+    print(f"Running Pathing Bot for {t} seconds")
 
-def farmMove():
-    print("Moving Farm...press 'LSHIFT' to stop")
-    active = True
-    #print(win32api.GetAsyncKeyState(win32con.VK_LSHIFT) & 0x8000)
-    start_move = time.time()
-    bossRaids = 1
-    runBoss()
-    while active:
-        if((time.time()-start_move)//2700>bossRaids):
-            bossRaids += 1
-            runBoss()
-        leftClick(levelUp)
-        time.sleep(0.5)
-        leftClick(constant.PLAY_AGAIN)
-        time.sleep(0.5)
-        sweepLeft()
-        sweepRight()
-        if(win32api.GetAsyncKeyState(win32con.VK_LSHIFT) & 0x8000):
-            print("pressed stop code")
-            active = False #farming will stop
-    print("Moving Farm is done.")
 
 def main():
     print("Bot starting")
-    
+
+    botName1 = "Simple"
+    botName2 = "Pathing"
+
     #SELECT BOT MODE
-    option = 0
+    option = pyautogui.confirm(text="", title="", buttons=[botName1, botName2])
+
+    #Select time
+    response = pyautogui.prompt(text="Enter the number of seconds to run the bot for (integer)", title="Run Time", default="300")
+    botTime = int(response)
 
     print("Farming (", option, ") Mode...")
-    if option==0:
-        farmSimple(int(input("Number of seconds to run: ")))
-    else:
-        farmMove()
-    print("Bot Stopped.")
+    if option == botName1:
+        farmSimple(botTime)
+        print("Bot Stopped.")
+        return
+    if option == botName2:
+        farmMove(botTime)
+        print("Bot Stopped.")
+        return
 
 if __name__ == '__main__':
     main()
