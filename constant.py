@@ -1,7 +1,10 @@
 # Change these two when using a new setup
 # Values can be found using getPos.py
-TOP_LEFT = (2447, 173)
-BOTTOM_RIGHT = (2934, 1036)
+# TOP_LEFT = (2447, 173)
+# BOTTOM_RIGHT = (2934, 1036)
+TOP_LEFT = (528, 173)
+BOTTOM_RIGHT = (1015, 1036)
+
 
 # Speed of player movement
 SPEED = 2
@@ -9,6 +12,9 @@ SPEED = 2
 # Screen size derived from above coords
 SCREEN_WIDTH = BOTTOM_RIGHT[0] - TOP_LEFT[0]
 SCREEN_HEIGHT = BOTTOM_RIGHT[1] - TOP_LEFT[1]
+
+GAME_BOX = (TOP_LEFT[0], TOP_LEFT[1], BOTTOM_RIGHT[0], BOTTOM_RIGHT[1])
+X_BOX = (528, 173, 528 + SCREEN_WIDTH, 173 + SCREEN_HEIGHT) #TODO
 
 # Generates coordinates based on ratio of game screen size
 ratioToCoord = lambda x, y : (int(TOP_LEFT[0] + SCREEN_WIDTH * x), int(TOP_LEFT[1] + SCREEN_HEIGHT * y)) 

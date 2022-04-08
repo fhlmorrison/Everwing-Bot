@@ -5,6 +5,7 @@ import time
 import win32api, win32con
 import pyautogui
 import constant
+import imageProcessing as imp
 
 #constants
 begPlayerCoor = (947, 832)
@@ -65,10 +66,19 @@ def farmSimple(t):
     stop = False
     start_time = time.time()
     while(((time.time()-start_time)<t) and (not stop)):
-        if(win32api.GetAsyncKeyState(0x53) & 0x8000):
-            stop = True #farming will stop
         leftClick(constant.PLAY_AGAIN)
-        time.sleep(1)
+        while not (imp.dead() or stop):
+            if(win32api.GetAsyncKeyState(0x53) & 0x8000):
+                stop = True #farming will stop
+            sweepLeft()
+            sweepRight()
+        leftClick(constant.CONTINUE_X_BUTTON)
+        time.sleep(5)
+        leftClick(constant.SKIP_BUTTON)
+        time.sleep(2)
+        leftClick(constant.OKAY_BUTTON)
+        time.sleep(2)
+
     print("Simple Farm is done.")
 
 def runBoss():

@@ -1,9 +1,11 @@
 import cv2
 from PIL import ImageGrab, ImageOps, Image, ImageEnhance, ImageFilter
 import pyautogui
-import pytesseract
+#import pytesseract
 import time
 import win32api, win32con
+import constant
+import numpy as np
 
 #constants
 playAgainBtn = (226, 704)
@@ -16,11 +18,11 @@ levelUp = (226, 521)
 sidekicks = (320,454)
 characters = (220,317)
 
+REGION=(528, 173, 528 + constant.SCREEN_WIDTH, 173 + constant.SCREEN_HEIGHT)
+
 #params
 x_pad = 291 #-402
 y_pad = 178
-gameBox = (291,178,738,969)
-gameBoxS = (291,178,447,791)
 gameBoxC = ((291,178),(738,178),(738,969),(291,969))
 coinBox = (284+x_pad, 1+y_pad, 120, 35)
 xPossible = [378, 422, 504, 571, 620, 660]
@@ -30,13 +32,37 @@ methods = ['cv2.TM_CCOEFF', 'cv2.TM_CCOEFF_NORMED', 'cv2.TM_CCORR',
             'cv2.TM_CCORR_NORMED', 'cv2.TM_SQDIFF', 'cv2.TM_SQDIFF_NORMED']
 
 def debug():
-    im = pyautogui.screenshot("tests\\screenEW.png", region=gameBoxS)
-    img = cv2.imread('tests\\screenEW.png')
-    cv2.circle(img, (playAgainBtn[0], playAgainBtn[1]), 6, (255, 0, 0))
-    cv2.circle(img, (bossRaids[0], bossRaids[1]), 6, (255, 255, 0))
-    #cv2.WINDOW_NORMAL
+    print("yoo")
+    t1 = time.perf_counter()
+    #im = pyautogui.screenshot("tests\\screenEW.png", region=(528, 173, constant.SCREEN_WIDTH, constant.SCREEN_HEIGHT))
+    im = ImageGrab.grab(bbox=constant.GAME_BOX)
+    img = cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)
+    testMatch = cv2.imread('buttons\\TESTDRAGON.png')
+    locations = match_all(img, testMatch, 0.7, debug=True)
+    t2 = time.perf_counter()
+    print(t2-t1)
+    print(locations)
+    print(len(locations))
+
     cv2.imshow('output', img)
+    print("yo")
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+def match_all(image, template, threshold=0.8, debug=False, color=(0, 0, 255)):
+    """ Match all template occurrences which have a higher likelihood than the threshold """
+    width, height = template.shape[:2]
+    match_probability = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
+    match_locations = np.where(match_probability >= threshold)
+
+    # Add the match rectangle to the screen
+    locations = []
+    for x, y in zip(*match_locations[::-1]):
+        locations.append(((x, x + width), (y, y + height)))
+
+        if debug:
+            cv2.rectangle(image, (x, y), (x + width, y + height), color, 1)
+    return locations
 
 def readCoins():
     pyautogui.screenshot("tests\\screenEWCoin.png", region=coinBox)
@@ -44,13 +70,14 @@ def readCoins():
     #im = im.filter(ImageFilter.MedianFilter())
     #rip need to fix path
     text = pytesseract.image_to_string(Image.open('tests\\screenEWCoin.png'))
+    return text
 
 def findButtons():
-    im = pyautogui.screenshot("tests\\screenEW.png", region=gameBoxS)
+    im = pyautogui.screenshot("tests\\screenEW.png", region=constant.GAME_BOX)
     location = pyautogui.locateOnScreen('buttons\\bossRaids.png')
     #found = False
     while(False):
-        imTemp = pyautogui.screenshot(region=gameBoxS)
+        imTemp = pyautogui.screenshot(region=constant.GAME_BOX)
         location = pyautogui.locate('buttons\\bossRaids.png', imTemp, grayscale=True)
         if(location is not None):
             found = True
@@ -59,7 +86,7 @@ def findButtons():
     #print(x,y)
 
 def findButtons2():
-    im = pyautogui.screenshot("tests\\screenEW.png", region=gameBoxS)
+    im = pyautogui.screenshot("tests\\screenEW.png", region=constant.GAME_BOX)
     img = cv2.imread("buttons\\lily.png")
     template = cv2.imread("tests\\screenEW.png",0)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -76,13 +103,13 @@ def findButtons2():
     cv2.waitKey(0)
 
 def findHead():
-    im = pyautogui.screenshot("tests\\screenEW.png", region=gameBoxS)
+    im = pyautogui.screenshot("tests\\screenEW.png", region=constant.GAME_BOX)
     active = True
     while(active):
         if(win32api.GetAsyncKeyState(win32con.VK_LSHIFT) & 0x8000):
             print("pressed stop code")
             active = False #farming will stop
-        imTemp = pyautogui.screenshot(region=gameBoxS)
+        imTemp = pyautogui.screenshot(region=constant.GAME_BOX)
         #location = pyautogui.locate('buttons\\quests.png', imTemp, grayscale=True)
         location = pyautogui.locateOnScreen("buttons\\lilyHead.png")
         print(location)
@@ -149,7 +176,10 @@ def main():
     #print(getHead())
     #findButtons()
     #findButtons2()
-    farm()
+    #farm()
+    print("hi")
+    debug()
+    print("Done")
 
 if __name__ == '__main__':
     main()
