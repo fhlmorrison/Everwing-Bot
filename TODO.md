@@ -8,7 +8,7 @@ High Prio
     - ~~*leftClick(c)* calls *pyautogui.click(x=, y=)*~~
 - ~~Put constants in own module~~
 
-- Death detection and resetting
+- ~~Death detection and resetting~~
 - Fireball avoidance
 
 
