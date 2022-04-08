@@ -1,17 +1,17 @@
-High Prio
 - ~~Set button positions as ratios of the screen size~~
 - ~~Get positions from xy of top left and bottom right corners~~
-- Left-right sweeping
+- ~~Left-right sweeping~~
     - ~~Change sweeping to use duration param of *pyautogui.dragTo()*~~
-- Standardize coordinate system to avoid using x_pad and y_pad params
+- ~~Standardize coordinate system to avoid using x_pad and y_pad params~~
 - (attempt to) Substitute all *win32api* and *win32con* calls with *pyautogui* and *keyboard* calls
     - ~~*leftClick(c)* calls *pyautogui.click(x=, y=)*~~
 - ~~Put constants in own module~~
-
 - ~~Death detection and resetting~~
-- Fireball avoidance
+- Auto-Pathing
+    -  Fireball avoidance
+    - Coin + Gem collection
+    - Line clearing
+    - Loot Goblin targeting
 
-
-Low Prio
 - Built in range setter (get xy of corners of game)
 - Refactoring code base to split into smaller modules
