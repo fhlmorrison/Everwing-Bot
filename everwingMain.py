@@ -70,14 +70,18 @@ def farmSimple(t):
         while not (imp.dead() or stop):
             if(win32api.GetAsyncKeyState(0x53) & 0x8000):
                 stop = True #farming will stop
+                break
             sweepLeft()
             sweepRight()
+        else: 
+            if stop:
+                break
         leftClick(constant.CONTINUE_X_BUTTON)
-        time.sleep(5)
+        time.sleep(10)
         leftClick(constant.SKIP_BUTTON)
-        time.sleep(2)
+        time.sleep(4)
         leftClick(constant.OKAY_BUTTON)
-        time.sleep(2)
+        time.sleep(4)
 
     print("Simple Farm is done.")
 
@@ -127,7 +131,7 @@ def main():
 
     print("Farming (", option, ") Mode...")
     if option==0:
-        farmSimple(999999)
+        farmSimple(int(input("Number of seconds to run: ")))
     else:
         farmMove()
     print("Bot Stopped.")
