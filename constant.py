@@ -3,6 +3,9 @@
 TOP_LEFT = (2447, 173)
 BOTTOM_RIGHT = (2934, 1036)
 
+# Speed of player movement
+SPEED = 2
+
 # Screen size derived from above coords
 SCREEN_WIDTH = BOTTOM_RIGHT[0] - TOP_LEFT[0]
 SCREEN_HEIGHT = BOTTOM_RIGHT[1] - TOP_LEFT[1]
