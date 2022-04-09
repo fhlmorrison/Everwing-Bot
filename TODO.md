@@ -7,6 +7,7 @@
     - ~~*leftClick(c)* calls *pyautogui.click(x=, y=)*~~
 - ~~Put constants in own module~~
 - ~~Death detection and resetting~~
+- Closed loop movement (position feedback)
 - Auto-Pathing
     -  Fireball avoidance
     - Coin + Gem collection
