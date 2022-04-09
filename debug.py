@@ -1,11 +1,12 @@
 import cv2
-from PIL import ImageGrab, ImageOps, Image, ImageEnhance, ImageFilter
+from PIL import ImageGrab, Image
 import pyautogui
 #import pytesseract
 import time
 import win32api, win32con
 import constant
 import numpy as np
+import imageProcessing as imp
 
 #constants
 playAgainBtn = (226, 704)
@@ -38,31 +39,22 @@ def debug():
     im = ImageGrab.grab(bbox=constant.GAME_BOX)
     img = cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)
     testMatch = cv2.imread('buttons\\TESTDRAGON.png')
-    locations = match_all(img, testMatch, 0.7, debug=True)
+    locations = imp.match_all(img, testMatch, 0.6, debug=True)
     t2 = time.perf_counter()
     print(t2-t1)
     print(locations)
     print(len(locations))
+    if len(locations) > 0:
+        center = tuple(map(lambda x, y : (x + y)//2, locations[0][0], locations[0][1]))
+        print(center)
+        print(f"Adjusted center: {(center[0] + constant.TOP_LEFT[0], center[1] + constant.TOP_LEFT[1])}")
+    
 
     cv2.imshow('output', img)
     print("yo")
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def match_all(image, template, threshold=0.8, debug=False, color=(0, 0, 255)):
-    """ Match all template occurrences which have a higher likelihood than the threshold """
-    width, height = template.shape[:2]
-    match_probability = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
-    match_locations = np.where(match_probability >= threshold)
-
-    # Add the match rectangle to the screen
-    locations = []
-    for x, y in zip(*match_locations[::-1]):
-        locations.append(((x, x + width), (y, y + height)))
-
-        if debug:
-            cv2.rectangle(image, (x, y), (x + width, y + height), color, 1)
-    return locations
 
 def readCoins():
     pyautogui.screenshot("tests\\screenEWCoin.png", region=coinBox)

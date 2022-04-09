@@ -77,6 +77,7 @@ def farmSimple(t):
         else: 
             if stop:
                 continue
+        imp.xShare()
         leftClick(constant.CONTINUE_X_BUTTON)
         time.sleep(8)
         leftClick(constant.SKIP_BUTTON)
